@@ -1,0 +1,9 @@
+﻿Admin User Logs in 
+Waits for Client 
+Marks Application as online/Offline
+Client User opens 
+
+Admin User 
+
+Visiter
+

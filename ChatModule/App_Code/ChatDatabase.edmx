@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CompanyModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="CompanyModelStoreContainer">
+          <EntitySet Name="AdminUser" EntityType="CompanyModel.Store.AdminUser" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Chat" EntityType="CompanyModel.Store.Chat" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Clients" EntityType="CompanyModel.Store.Clients" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="500" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="500" />
+          <Property Name="ContactNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailID" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="AdminID" Type="int" Nullable="false" />
+          <Property Name="ChatString" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PostedOn" Type="datetime" Nullable="false" />
+          <Property Name="IsNewToClient" Type="bit" />
+          <Property Name="IsNewToAdmin" Type="bit" />
+          <Property Name="PostedForOffline" Type="bit" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="ContactNo" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="LastLoggedIn" Type="datetime" />
+          <Property Name="LoggedInWhenOffline" Type="bit" />
+        </EntityType>
+        <Function Name="SP_DeleteChatHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_GetOnlineUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_IsNewToAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmailId" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_IsNewToClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmailId" Type="nvarchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CompanyModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ChatEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdminUsers" EntityType="CompanyModel.AdminUser" />
+          <EntitySet Name="Chats" EntityType="CompanyModel.Chat" />
+          <EntitySet Name="Clients" EntityType="CompanyModel.Client" />
+          <FunctionImport Name="Clear_IsNewToClient">
+          <Parameter Name="EmailId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Clear_IsNewToAdmin">
+          <Parameter Name="EmailId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteChatHistory">
+          </FunctionImport>
+          <FunctionImport Name="SP_GetOnlineUsers" ReturnType="Collection(CompanyModel.OnlineUserCollection)" />
+        </EntityContainer>
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Type="String" Name="FirstName" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LastName" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ContactNo" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailID" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="AdminID" Type="Int32" Nullable="false" />
+          <Property Name="ChatString" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="PostedOn" Type="DateTime" Nullable="false" />
+          <Property Name="IsNewToClient" Type="Boolean" />
+          <Property Name="IsNewToAdmin" Type="Boolean" />
+          <Property Type="Boolean" Name="PostedForOffline" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="ContactNo" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="LastLoggedIn" Type="DateTime" />
+          <Property Name="LoggedInWhenOffline" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="OnlineUserCollection">
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="200" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CompanyModelStoreContainer" CdmEntityContainer="ChatEntities">
+          <EntitySetMapping Name="AdminUsers"><EntityTypeMapping TypeName="CompanyModel.AdminUser"><MappingFragment StoreEntitySet="AdminUser">
+            <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="UserName" ColumnName="UserName" />
+            <ScalarProperty Name="Password" ColumnName="Password" />
+            <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Chats"><EntityTypeMapping TypeName="CompanyModel.Chat"><MappingFragment StoreEntitySet="Chat">
+            <ScalarProperty Name="PostedForOffline" ColumnName="PostedForOffline" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+            <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+            <ScalarProperty Name="ChatString" ColumnName="ChatString" />
+            <ScalarProperty Name="PostedOn" ColumnName="PostedOn" />
+            <ScalarProperty Name="IsNewToClient" ColumnName="IsNewToClient" />
+            <ScalarProperty Name="IsNewToAdmin" ColumnName="IsNewToAdmin" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Clients"><EntityTypeMapping TypeName="CompanyModel.Client"><MappingFragment StoreEntitySet="Clients">
+            <ScalarProperty Name="Email" ColumnName="Email" />
+            <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+            <ScalarProperty Name="LastName" ColumnName="LastName" />
+            <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+            <ScalarProperty Name="LastLoggedIn" ColumnName="LastLoggedIn" />
+            <ScalarProperty Name="LoggedInWhenOffline" ColumnName="LoggedInWhenOffline" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Clear_IsNewToClient" FunctionName="CompanyModel.Store.SP_IsNewToClient" />
+          <FunctionImportMapping FunctionImportName="Clear_IsNewToAdmin" FunctionName="CompanyModel.Store.SP_IsNewToAdmin" />
+          <FunctionImportMapping FunctionImportName="DeleteChatHistory" FunctionName="CompanyModel.Store.SP_DeleteChatHistory" />
+          <FunctionImportMapping FunctionImportName="SP_GetOnlineUsers" FunctionName="CompanyModel.Store.SP_GetOnlineUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CompanyModel.OnlineUserCollection">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ChatDatabase">
+        <EntityTypeShape EntityType="CompanyModel.AdminUser" Width="1.5" PointX="0.75" PointY="0.75" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="CompanyModel.Chat" Width="1.5" PointX="2.75" PointY="0.75" Height="2.3648893229166665" IsExpanded="true" />
+        <EntityTypeShape EntityType="CompanyModel.Client" Width="1.5" PointX="4.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
